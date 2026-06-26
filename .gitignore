@@ -5,17 +5,17 @@ node_modules/
 .env
 .env.local
 
-# Temporary files
+# Temporary
 temp/
 
-# Windows binaries (tidak perlu di GitHub)
+# Windows binaries
 bin/
 
 # Logs
 *.log
 npm-debug.log*
 
-# OS files
+# OS
 .DS_Store
 Thumbs.db
 
