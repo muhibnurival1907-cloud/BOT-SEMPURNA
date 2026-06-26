@@ -1,52 +1,83 @@
 const { default: YTDlpWrap } = require("yt-dlp-wrap");
-const path = require("path");
 const fs = require("fs");
+const path = require("path");
+
 const metadata = require("./metadata");
 
-const ytDlpPath =
-    process.platform === "win32"
-        ? path.join(__dirname, "../bin/yt-dlp.exe")
-        : path.join(__dirname, "../bin/yt-dlp");
+// ================================
+// Folder
+// ================================
 
-const yt = new YTDlpWrap(ytDlpPath);
+const BIN_DIR = path.join(__dirname, "../bin");
+const TEMP_DIR = path.join(__dirname, "../temp");
 
-// Menghapus karakter yang tidak valid pada nama file
-function sanitize(name) {
-    return name.replace(/[\\/:*?"<>|]/g, "").trim();
+if (!fs.existsSync(TEMP_DIR)) {
+    fs.mkdirSync(TEMP_DIR, { recursive: true });
 }
 
-// Memastikan yt-dlp tersedia
+// ================================
+// Binary yt-dlp
+// ================================
+
+const ytBinary = process.platform === "win32"
+    ? path.join(BIN_DIR, "yt-dlp.exe")
+    : path.join(BIN_DIR, "yt-dlp");
+
+const yt = new YTDlpWrap(ytBinary);
+
+// ================================
+// Membersihkan nama file
+// ================================
+
+function sanitizeFilename(name) {
+
+    return name
+        .replace(/[\\/:*?"<>|]/g, "")
+        .replace(/\s+/g, " ")
+        .trim();
+
+}
+
+// ================================
+// Download yt-dlp jika belum ada
+// ================================
+
 async function ensureYtDlp() {
 
-    if (!fs.existsSync(ytDlpPath)) {
-
-        console.log("Downloading yt-dlp...");
-
-        await YTDlpWrap.downloadFromGithub(ytDlpPath);
-
-        if (process.platform !== "win32") {
-            fs.chmodSync(ytDlpPath, 0o755);
-        }
-
-        console.log("yt-dlp downloaded.");
-
+    if (fs.existsSync(ytBinary)) {
+        return;
     }
+
+    console.log("⬇ Downloading yt-dlp...");
+
+    await YTDlpWrap.downloadFromGithub(ytBinary);
+
+    if (process.platform !== "win32") {
+        fs.chmodSync(ytBinary, 0o755);
+    }
+
+    console.log("✓ yt-dlp ready.");
 
 }
 
-module.exports = async function(song){
+// ================================
+// Download Lagu
+// ================================
+
+module.exports = async function (song) {
 
     await ensureYtDlp();
 
-    const filename = sanitize(`${song.author} - ${song.title}`);
+    const filename = sanitizeFilename(
+        `${song.author} - ${song.title}`
+    );
 
     const output = path.join(
-        __dirname,
-        "../temp",
+        TEMP_DIR,
         `${filename}.mp3`
     );
 
-    if(fs.existsSync(output)){
+    if (fs.existsSync(output)) {
         fs.unlinkSync(output);
     }
 
@@ -56,34 +87,72 @@ module.exports = async function(song){
 
         "-x",
 
-        "--audio-format","mp3",
+        "--audio-format",
+        "mp3",
 
-        "--audio-quality","0",
+        "--audio-quality",
+        "0",
 
-        "-o",output
+        "--no-playlist",
+
+        "-o",
+        output
 
     ];
 
-    // Windows menggunakan ffmpeg.exe
-    if(process.platform === "win32"){
+    // Windows memakai ffmpeg.exe dari folder bin
+    if (process.platform === "win32") {
 
         args.push(
             "--ffmpeg-location",
-            path.join(__dirname,"../bin")
+            BIN_DIR
         );
 
     }
 
-    await yt.execPromise(args);
+    try {
 
-    await metadata(song,output);
+        console.log("Downloading :", song.title);
+
+        await yt.execPromise(args);
+
+        console.log("✓ Download selesai");
+
+    } catch (err) {
+
+        throw new Error(
+            "Gagal mengunduh audio.\n" + err.message
+        );
+
+    }
+
+    // ================================
+    // Metadata
+    // ================================
+
+    try {
+
+        await metadata(song, output);
+
+        console.log("✓ Metadata berhasil");
+
+    } catch (err) {
+
+        console.warn(
+            "Metadata gagal:",
+            err.message
+        );
+
+    }
+
+    // ================================
 
     return {
 
-        path:output,
+        path: output,
 
-        filename:`${filename}.mp3`
+        filename: `${filename}.mp3`
 
     };
 
-}
+};
