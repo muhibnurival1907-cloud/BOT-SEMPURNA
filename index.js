@@ -16,8 +16,8 @@ const bot = new Telegraf(process.env.BOT_TOKEN);
 // =====================
 
 bot.start(start);
+bot.command("help", help);
 
-// Semua pesan teks akan dianggap sebagai pencarian lagu
 bot.on("text", music);
 
 // =====================

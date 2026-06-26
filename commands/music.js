@@ -6,6 +6,11 @@ module.exports = async (ctx) => {
 
     const query = ctx.message.text.trim();
 
+    // Abaikan semua command Telegram
+    if (query.startsWith("/")) {
+        return;
+    }
+
     if (!query) {
         return ctx.reply("❌ Masukkan judul lagu.");
     }
