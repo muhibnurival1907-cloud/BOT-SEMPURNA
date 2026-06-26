@@ -3,9 +3,13 @@ node_modules/
 
 # Environment
 .env
+.env.local
 
 # Temporary files
 temp/
+
+# Windows binaries (tidak perlu di GitHub)
+bin/
 
 # Logs
 *.log
@@ -18,6 +22,3 @@ Thumbs.db
 # Editor
 .vscode/
 .idea/
-
-# Optional (kalau nanti memakai local env)
-.env.local
