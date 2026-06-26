@@ -25,10 +25,6 @@ const ytBinary = process.platform === "win32"
 
 const yt = new YTDlpWrap(ytBinary);
 
-// ================================
-// Membersihkan nama file
-// ================================
-
 function sanitizeFilename(name) {
 
     return name
@@ -38,11 +34,12 @@ function sanitizeFilename(name) {
 
 }
 
-// ================================
-// Download yt-dlp jika belum ada
-// ================================
-
 async function ensureYtDlp() {
+
+    // Pastikan folder bin ada
+    if (!fs.existsSync(BIN_DIR)) {
+        fs.mkdirSync(BIN_DIR, { recursive: true });
+    }
 
     if (fs.existsSync(ytBinary)) {
         return;
@@ -56,8 +53,7 @@ async function ensureYtDlp() {
         fs.chmodSync(ytBinary, 0o755);
     }
 
-    console.log("✓ yt-dlp ready.");
-
+    console.log("✅ yt-dlp downloaded.");
 }
 
 // ================================
