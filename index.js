@@ -4,6 +4,7 @@ const fs = require("fs");
 const { Telegraf } = require("telegraf");
 
 const start = require("./commands/start");
+const help = require("./commands/help");
 const music = require("./commands/music");
 const download = require("./services/downloader");
 const cache = require("./services/cache");
