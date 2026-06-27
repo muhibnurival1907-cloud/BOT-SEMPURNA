@@ -5,6 +5,7 @@ const { Telegraf } = require("telegraf");
 
 const start = require("./commands/start");
 const help = require("./commands/help");
+const about = require("./commands/about");
 const music = require("./commands/music");
 const download = require("./services/downloader");
 const cache = require("./services/cache");
@@ -17,12 +18,20 @@ const bot = new Telegraf(process.env.BOT_TOKEN);
 
 bot.start(start);
 bot.command("help", help);
+bot.command("about", about);
 
-bot.on("text", music);
+bot.hears(/^[^/].*/, music);
 
-// =====================
-// PILIH LAGU
-// =====================
+const { Markup } = require("telegraf");
+
+bot.hears("🎵 Cari Lagu", async (ctx) => {
+        await ctx.reply(
+            "🎵 Silakan kirim judul lagu yang ingin dicari."
+            Markup.removeKeyboard()
+        );
+});        
+
+bot.hears("👨‍💻 Tentang Bot", about);
 
 bot.action(/music_(\d+)/, async (ctx) => {
 

@@ -1,17 +1,21 @@
+const { Markup } = require("telegraf");
+
 module.exports = async (ctx) => {
+
     await ctx.reply(
 `🎵 <b>Marbeque Music Bot v3.1</b>
 
 Selamat datang di <b>Marbeque Music</b>! 🎧
 
-Bot ini memungkinkan kamu mencari dan mengunduh lagu dari YouTube dalam format MP3 dengan metadata dan cover album secara otomatis.
+Bot ini memungkinkan kamu mencari dan mengunduh lagu dari YouTube dalam format MP3 lengkap dengan metadata dan cover album.
 
 ━━━━━━━━━━━━━━━━━━
 
 📖 <b>Perintah</b>
 
 /start - Memulai bot
-/help - Menampilkan bantuan
+/help - Bantuan
+/about - Tentang bot
 
 ━━━━━━━━━━━━━━━━━━
 
@@ -22,34 +26,28 @@ Bot ini memungkinkan kamu mencari dan mengunduh lagu dari YouTube dalam format M
 Contoh:
 <code>Die With A Smile</code>
 
-2️⃣ Pilih lagu dari daftar yang muncul
+2️⃣ Pilih lagu dari daftar
 
-3️⃣ Tunggu proses download selesai
+3️⃣ Tunggu proses download
 
-4️⃣ Bot akan mengirim file MP3 lengkap dengan:
+4️⃣ Bot akan mengirim MP3 lengkap dengan:
+
 ✅ Cover Album
-✅ Judul Lagu
-✅ Nama Artis
 ✅ Metadata
+✅ Judul
+✅ Nama Artis
 
 ━━━━━━━━━━━━━━━━━━
 
-⚡ <b>Fitur</b>
-
-🎼 Pencarian lagu cepat
-🎵 MP3 kualitas terbaik
-🖼 Cover album otomatis
-📝 Metadata otomatis
-☁️ Online 24/7
-
-━━━━━━━━━━━━━━━━━━
-
-💙 Terima kasih telah menggunakan
-<b>Marbeque Music Bot</b>
-
-Selamat menikmati musik! 🎧`,
+💙 Selamat menikmati musik! 🎧`,
         {
-            parse_mode: "HTML"
+            parse_mode: "HTML",
+            ...Markup.keyboard([
+                ["🎵 Cari Lagu"],
+                ["📖 Bantuan", "👨‍💻 Tentang Bot"]
+            ])
+                .resize()
+                .persistent()
         }
     );
 

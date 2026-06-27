@@ -1,49 +1,36 @@
-const path = require("path");
+const { Markup } = require("telegraf");
 
 module.exports = async (ctx) => {
 
-    const photo = {
-        source: path.join(__dirname, "../assets/avatar.jpg")
-    };
+    await ctx.reply(
+`🎵 <b>Selamat Datang di Marbeque Music</b>
 
-    const caption = `
-🎵 <b>Marbeque Music</b>
-
-━━━━━━━━━━━━━━━━━━
-
-🎧 Selamat datang di Marbeque Music Bot!
-
-Bot ini dapat mencari lagu dari YouTube dan mengirimkannya dalam format MP3 lengkap dengan metadata.
+Bot Telegram untuk mencari dan mengunduh lagu YouTube dalam format MP3 berkualitas tinggi.
 
 ━━━━━━━━━━━━━━━━━━
 
 ✨ Fitur
 
-• 🔍 Cari lagu
-• 🎵 Download MP3
-• 🖼 Cover Album
-• 📝 Metadata Lagu
-• ☁️ Server Railway 24/7
+🎼 Cari lagu dengan cepat
+🎵 Download MP3
+🖼 Cover Album Otomatis
+📝 Metadata Otomatis
+☁️ Online 24 Jam
 
 ━━━━━━━━━━━━━━━━━━
 
-📌 Cara menggunakan:
+AUTHOR:@OribeAzusa31
 
-Kirim judul lagu.
-
-Contoh:
-Alan Walker Faded
-Hindia Evaluasi
-Nadin Amizah Bertaut
-
-━━━━━━━━━━━━━━━━━━
-
-Version 3.0
-`;
-
-    await ctx.replyWithPhoto(photo, {
-        caption,
-        parse_mode: "HTML"
-    });
+Silakan pilih menu di bawah atau langsung kirim judul lagu.`,
+        {
+            parse_mode: "HTML",
+            ...Markup.keyboard([
+                ["🎵 Cari Lagu"],
+                ["📖 Bantuan", "👨‍💻 Tentang Bot"]
+            ])
+                .resize()
+                .persistent()
+        }
+    );
 
 };
