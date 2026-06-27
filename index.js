@@ -2,6 +2,7 @@ require("dotenv").config();
 
 const fs = require("fs");
 const { Telegraf } = require("telegraf");
+const { Markup } = require("telegraf");
 
 const start = require("./commands/start");
 const help = require("./commands/help");
@@ -21,8 +22,6 @@ bot.command("help", help);
 bot.command("about", about);
 
 bot.hears(/^[^/].*/, music);
-
-const { Markup } = require("telegraf");
 
 bot.hears("🎵 Cari Lagu", async (ctx) => {
         await ctx.reply(
