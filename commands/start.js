@@ -4,7 +4,7 @@ const path = require("path");
 module.exports = async (ctx) => {
 
     const photo = {
-        source: path.join(__dirname, "../assets/banner.jpg")
+        source: path.join(__dirname, "../assets/avatar.jpg")
     };
 
     await ctx.replyWithPhoto(photo, {
