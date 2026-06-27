@@ -77,6 +77,7 @@ bot.action(/music_(\d+)/, async (ctx) => {
     try {
 
         const file = await download(song);
+        console.log(file.path);
 
         console.log("");
         console.log("========== DOWNLOAD ==========");

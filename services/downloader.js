@@ -109,8 +109,6 @@ if (!videoId) {
         "--audio-quality",
         "0",
 
-        "--embed-thumbnail",
-
         "--no-playlist",
 
         "--no-warnings",
