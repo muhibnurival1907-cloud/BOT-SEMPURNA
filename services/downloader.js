@@ -161,6 +161,12 @@ if (!videoId) {
 
         await yt.execPromise(args);
 
+        const info = execSync(
+            `ffprobe -v error -show_format -show_streams "${finalMp3}"`
+        ).toString();
+
+    console.log(info);
+
     } catch (err) {
 
         console.error("yt-dlp gagal:");
@@ -179,21 +185,18 @@ if (!videoId) {
 
     try {
 
-        await metadata(song, finalMp3);
         fs.copyFileSync(finalMp3, cacheMp3);
 
-    console.log("");
-    console.log("========================");
-    console.log("💾 Cache disimpan");
-    console.log(videoId);
-    console.log("========================");
-    console.log("");
+        console.log("");
+        console.log("========================");
+        console.log("💾 Cache disimpan (Tanpa Metadata");
+        console.log(videoId);
+        console.log("========================");
+        console.log("");
 
     } catch (err) {
 
-        console.warn("Metadata gagal:");
-
-        console.warn(err.message);
+        console.warn(err);
 
     }
 
