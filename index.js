@@ -78,12 +78,30 @@ bot.action(/music_(\d+)/, async (ctx) => {
 
         const file = await download(song);
 
+        console.log("");
+        console.log("========== DOWNLOAD ==========");
+        console.log(file);
+        console.log("==============================");
+        console.log("");
+
+        if (!fs.existsSync(file.path)) {
+            throw new Error("File MP3 tidak ditemukan:\n" + file.path);
+        }
+
+        const stats = fs.statSync(file.path);
+
+        console.log("Nama File :", file.filename);
+        console.log("Lokasi    :", file.path);
+        console.log("Ukuran    :", (stats.size / 1024 / 1024).toFixed(2), "MB");
+
         await ctx.telegram.editMessageText(
             ctx.chat.id,
             progress.message_id,
             undefined,
             "📤 Mengirim lagu..."
         );
+
+        console.log("➡ Mulai upload ke Telegram...");
 
         await ctx.replyWithAudio(
             {
@@ -96,8 +114,14 @@ bot.action(/music_(\d+)/, async (ctx) => {
             }
         );
 
+        console.log("✅ Upload Telegram berhasil");
+
         if (fs.existsSync(file.path)) {
+
             fs.unlinkSync(file.path);
+
+            console.log("🗑 File sementara dihapus");
+
         }
 
         await ctx.telegram.deleteMessage(
@@ -107,17 +131,18 @@ bot.action(/music_(\d+)/, async (ctx) => {
 
     } catch (err) {
 
+        console.error("");
+        console.error("========== ERROR ==========");
         console.error(err);
-
+        console.error("===========================");
+        console.error("");
         await ctx.telegram.editMessageText(
             ctx.chat.id,
             progress.message_id,
             undefined,
             "❌ Gagal mengunduh lagu."
         );
-
     }
-
 });
 
 // =====================
