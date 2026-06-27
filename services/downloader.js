@@ -65,8 +65,6 @@ module.exports = async function (song) {
 
         "--no-warnings",
 
-        "--prefer-ffmpeg",
-
         "-o",
 
         output
