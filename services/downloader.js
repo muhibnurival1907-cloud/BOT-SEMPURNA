@@ -13,9 +13,13 @@ const yt = new YTDlpWrap(ytBinary);
 
 // Folder penyimpanan sementara
 const tempDir = path.join(__dirname, "../temp");
+const CACHE_DIR = path.join(__dirname, "../cache");
 
 if (!fs.existsSync(tempDir)) {
     fs.mkdirSync(tempDir, { recursive: true });
+}
+if (!fs.existsSync(CACHE_DIR)) {
+    fs.mkdirSync(CACHE_DIR, { recursive: true });
 }
 
 // Membersihkan nama file
@@ -25,12 +29,55 @@ function sanitize(name) {
         .replace(/\s+/g, " ")
         .trim();
 }
+function getVideoId(url) {
+    try {
+            const u = new URL(url)
+            return u.searchParams.get("v");
+    } catch {
+        return null;
+    }
+}
 
 module.exports = async function (song) {
+
+    const videoId = getVideoId(song.url);
+
+if (!videoId) {
+    throw new Error("Video ID tidak ditemukan.");
+}
+
+    const cacheMp3 = path.join(
+    CACHE_DIR,
+    `${videoId}.mp3`
+);
 
     const filename = sanitize(
         `${song.author} - ${song.title}`
     );
+
+    if (fs.existsSync(cacheMp3)) {
+
+    console.log("");
+    console.log("========================");
+    console.log("✅ CACHE HIT");
+    console.log(videoId);
+    console.log("========================");
+    console.log("");
+
+    return {
+
+        path: cacheMp3,
+        filename: `${sanitize(`${song.author} - ${song.title}`)}.mp3`
+
+    };
+
+}
+
+    console.log("");
+    console.log("========================");
+    console.log("CACHE MISS");
+    console.log("========================");
+    console.log("");
 
     const output = path.join(
         tempDir,
@@ -109,6 +156,14 @@ module.exports = async function (song) {
     try {
 
         await metadata(song, finalMp3);
+        fs.copyFileSync(finalMp3, cacheMp3);
+
+    console.log("");
+    console.log("========================");
+    console.log("💾 Cache disimpan");
+    console.log(videoId);
+    console.log("========================");
+    console.log("");
 
     } catch (err) {
 
