@@ -135,6 +135,11 @@ if (!videoId) {
 
     try {
 
+        console.log("========================");
+        console.log("Arguments:");
+        console.log(args);
+        console.log("========================");
+        
         await yt.execPromise(args);
 
     } catch (err) {
