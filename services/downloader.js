@@ -1,6 +1,7 @@
 const { default: YTDlpWrap } = require("yt-dlp-wrap");
 const fs = require("fs");
 const path = require("path");
+const { execSync } = require("child_process");
 
 const metadata = require("./metadata");
 
