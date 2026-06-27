@@ -1,8 +1,7 @@
 require("dotenv").config();
 
 const fs = require("fs");
-const { Telegraf } = require("telegraf");
-const { Markup } = require("telegraf");
+const { Telegraf, Markup } = require("telegraf");
 
 const start = require("./commands/start");
 const help = require("./commands/help");
@@ -21,16 +20,33 @@ bot.start(start);
 bot.command("help", help);
 bot.command("about", about);
 
-bot.hears(/^[^/].*/, music);
+// =====================
+// MENU KEYBOARD
+// =====================
 
 bot.hears("🎵 Cari Lagu", async (ctx) => {
-        await ctx.reply(
-            "🎵 Silakan kirim judul lagu yang ingin dicari."
-            Markup.removeKeyboard()
-        );
-});        
+
+    await ctx.reply(
+        "🎵 Silakan kirim judul lagu yang ingin dicari.",
+        Markup.removeKeyboard()
+    );
+
+});
+
+bot.hears("📖 Bantuan", help);
 
 bot.hears("👨‍💻 Tentang Bot", about);
+
+// =====================
+// PENCARIAN LAGU
+// =====================
+
+// Semua teks yang bukan command akan dianggap sebagai judul lagu
+bot.hears(/^(?!\/).+$/, music);
+
+// =====================
+// PILIH LAGU
+// =====================
 
 bot.action(/music_(\d+)/, async (ctx) => {
 
@@ -39,11 +55,12 @@ bot.action(/music_(\d+)/, async (ctx) => {
     const songs = cache.get(ctx.chat.id);
 
     if (!songs) {
-        return ctx.reply("❌ Daftar lagu sudah kedaluwarsa.\nSilakan cari lagi.");
+        return ctx.reply(
+            "❌ Daftar lagu sudah kedaluwarsa.\nSilakan cari lagi."
+        );
     }
 
     const index = Number(ctx.match[1]);
-
     const song = songs[index];
 
     if (!song) {
@@ -74,7 +91,6 @@ bot.action(/music_(\d+)/, async (ctx) => {
             }
         );
 
-        // hapus file sementara
         if (fs.existsSync(file.path)) {
             fs.unlinkSync(file.path);
         }
