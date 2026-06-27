@@ -98,6 +98,9 @@ if (!videoId) {
 
         song.url,
 
+        "-f",
+        "bestaudio/best",
+
         "--extract-audio",
 
         "--audio-format",
@@ -128,6 +131,11 @@ if (!videoId) {
         cookiePath
     );
 }
+
+    args.push(
+        "--extractor-args",
+        "youtube:player_client=android"
+);
 
     // Windows perlu lokasi ffmpeg
     if (process.platform === "win32") {
