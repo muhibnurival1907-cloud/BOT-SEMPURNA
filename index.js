@@ -1,6 +1,7 @@
 require("dotenv").config();
 
 const fs = require("fs");
+const { execSync } = require("child_process");
 const { Telegraf, Markup } = require("telegraf");
 
 const start = require("./commands/start");
@@ -41,7 +42,6 @@ bot.hears("👨‍💻 Tentang Bot", about);
 // PENCARIAN LAGU
 // =====================
 
-// Semua teks yang bukan command akan dianggap sebagai judul lagu
 bot.hears(/^(?!\/).+$/, music);
 
 // =====================
@@ -55,16 +55,21 @@ bot.action(/music_(\d+)/, async (ctx) => {
     const songs = cache.get(ctx.chat.id);
 
     if (!songs) {
+
         return ctx.reply(
             "❌ Daftar lagu sudah kedaluwarsa.\nSilakan cari lagi."
         );
+
     }
 
     const index = Number(ctx.match[1]);
+
     const song = songs[index];
 
     if (!song) {
+
         return ctx.reply("❌ Lagu tidak ditemukan.");
+
     }
 
     const progress = await ctx.reply("📥 Sedang mengunduh lagu...");
@@ -136,6 +141,33 @@ bot.catch((err) => {
         await bot.telegram.deleteWebhook({
             drop_pending_updates: true
         });
+
+        // ==========================
+        // CEK VERSI yt-dlp
+        // ==========================
+
+        try {
+
+            const version = execSync("yt-dlp --version")
+                .toString()
+                .trim();
+
+            console.log("");
+            console.log("==============================");
+            console.log("yt-dlp version :", version);
+            console.log("==============================");
+            console.log("");
+
+        } catch (err) {
+
+            console.log("");
+            console.log("==============================");
+            console.log("yt-dlp tidak ditemukan");
+            console.log(err.message);
+            console.log("==============================");
+            console.log("");
+
+        }
 
         await bot.launch();
 
