@@ -118,6 +118,17 @@ if (!videoId) {
 
     ];
 
+    const cookiePath = path.join(__dirname, "../cookies.txt");
+
+    if (fs.existsSync(cookiePath)) {
+          console.log("🍪 Menggunakan cookies.txt");
+
+    args.push(
+        "--cookies",
+        cookiepath
+    );
+}
+
     // Windows perlu lokasi ffmpeg
     if (process.platform === "win32") {
 
@@ -139,7 +150,7 @@ if (!videoId) {
         console.log("Arguments:");
         console.log(args);
         console.log("========================");
-        
+
         await yt.execPromise(args);
 
     } catch (err) {
