@@ -1,4 +1,5 @@
 require("dotenv").config();
+const spotify = require("./services/spotify");
 
 const fs = require("fs");
 const { execSync } = require("child_process");
