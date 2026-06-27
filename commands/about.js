@@ -1,36 +1,39 @@
+const { Markup } = require("telegraf");
+
 module.exports = async (ctx) => {
 
     await ctx.reply(
 `🎵 <b>Marbeque Music Bot</b>
 
-Versi : <b>3.1.0</b>
+Version : <b>3.1.0</b>
+
+Bot Telegram untuk mencari dan mengunduh lagu YouTube menjadi MP3.
 
 ━━━━━━━━━━━━━━━━━━
 
-🚀 Dibangun menggunakan
+⚙️ Teknologi
 
 • Node.js
 • Telegraf
 • yt-dlp
 • FFmpeg
-• Railway
 
 ━━━━━━━━━━━━━━━━━━
 
-✨ Fitur
+👨‍💻 Developer
 
-🎼 Pencarian lagu YouTube
-🎵 Download MP3 kualitas tinggi
-🖼 Cover Album Otomatis
-📝 Metadata Otomatis
-☁️ Online 24 Jam
-
-━━━━━━━━━━━━━━━━━━
+<b>@OribeAzusa31</b>
 
 Terima kasih telah menggunakan
-<b>Marbeque Music Bot</b> ❤️`,
+<b>Marbeque Music Bot</b> 💙`,
         {
-            parse_mode: "HTML"
+            parse_mode: "HTML",
+            ...Markup.keyboard([
+                ["🎵 Cari Lagu"],
+                ["📖 Bantuan", "👨‍💻 Tentang Bot"]
+            ])
+                .resize()
+                .persistent()
         }
     );
 

@@ -1,36 +1,55 @@
 const { Markup } = require("telegraf");
+const path = require("path");
 
 module.exports = async (ctx) => {
 
-    await ctx.reply(
-`🎵 <b>Selamat Datang di Marbeque Music</b>
+    const photo = {
+        source: path.join(__dirname, "../assets/banner.jpg")
+    };
 
-Bot Telegram untuk mencari dan mengunduh lagu YouTube dalam format MP3 berkualitas tinggi.
+    await ctx.replyWithPhoto(photo, {
+        caption:
+`🎵 <b>Marbeque Music Bot v3.1</b>
 
-━━━━━━━━━━━━━━━━━━
+Selamat datang di <b>Marbeque Music</b>! 🎧
 
-✨ Fitur
-
-🎼 Cari lagu dengan cepat
-🎵 Download MP3
-🖼 Cover Album Otomatis
-📝 Metadata Otomatis
-☁️ Online 24 Jam
+Bot ini memungkinkan kamu mencari dan mengunduh lagu dari YouTube dalam format MP3 berkualitas tinggi lengkap dengan metadata dan cover album otomatis.
 
 ━━━━━━━━━━━━━━━━━━
 
-AUTHOR:@OribeAzusa31
+✨ <b>Fitur Utama</b>
 
-Silakan pilih menu di bawah atau langsung kirim judul lagu.`,
-        {
-            parse_mode: "HTML",
-            ...Markup.keyboard([
-                ["🎵 Cari Lagu"],
-                ["📖 Bantuan", "👨‍💻 Tentang Bot"]
-            ])
-                .resize()
-                .persistent()
-        }
-    );
+🎼 Pencarian lagu super cepat
+🎵 Download MP3 kualitas terbaik
+🖼 Cover album otomatis
+📝 Metadata lengkap
+☁️ Online 24/7
+
+━━━━━━━━━━━━━━━━━━
+
+📌 <b>Cara Menggunakan</b>
+
+• Tekan <b>🎵 Cari Lagu</b>
+atau
+• Langsung kirim judul lagu.
+
+Contoh:
+
+<code>Die With A Smile</code>
+
+━━━━━━━━━━━━━━━━━━
+
+💙 Selamat menikmati musik!
+
+👨‍💻 <b>Author</b>
+@OribeAzusa31`,
+        parse_mode: "HTML",
+        ...Markup.keyboard([
+            ["🎵 Cari Lagu"],
+            ["📖 Bantuan", "👨‍💻 Tentang Bot"]
+        ])
+            .resize()
+            .persistent()
+    });
 
 };
